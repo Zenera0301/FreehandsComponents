@@ -1,5 +1,6 @@
 if (isRelease) { // 如果是发布版本时，各个模块都不能独立运行
     apply plugin: 'com.android.library'
+    apply plugin: 'com.github.dcendents.android-maven'
 } else {
     apply plugin: 'com.android.application'
 }
@@ -85,26 +86,3 @@ dependencies {
 }
 
 
-//**********************************************************************   打包发布
-apply plugin: 'maven'
-
-uploadArchives {
-    def GITHUB_REPO_PATH = "../" // 生成的aar文件的保存目录，建议放在project根目录，也可以放在任意目录
-    repositories.mavenDeployer {
-        repository(url: "file://${file(GITHUB_REPO_PATH).absolutePath}")
-        pom.project {  //引用时的格式为【implementation 'com.dj:case-record-choose:1.0.0'】
-            groupId 'com.dj'
-            artifactId 'case-record-choose'
-            version '1.0.0' // 当你的库需要修改时，只需更改此版本号即可
-        }
-    }
-}
-
-// 和源代码一起打包
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-artifacts {
-    archives androidSourcesJar
-}
