@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CaseRecordChooseComponent</string>
+    <string name="shoppingcat">购物车</string>
+    <string name="actionBar_edit">编辑</string>
+    <string name="all">全选</string>
+    <string name="order_total">合计 :</string>
+    <string name="case_choose_init">案件选择(0)</string>
+    <string name="toggleButtonTextOn">排除</string>
+    <string name="toggleButtonTextOff">包含</string>
+    <string name="include">include</string>
+    <string name="exclude">exclude</string>
+</resources>

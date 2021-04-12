@@ -1,0 +1,19 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="side_distance">12dp</dimen>//默认左右边距
+    <dimen name="divider_distance">8dp</dimen>//默认分割线边距
+
+    <dimen name="ui_10_dip">10dip</dimen>
+
+    <dimen name="ViewTitleHeight">49dp</dimen>
+    <!-- 线性布局默认的高度 -->
+    <dimen name="DefaultLinearLayoutHeight">48dp</dimen>
+    <dimen name="recordLeftMargin">20dp</dimen>
+    <dimen name="recordRightMargin">20dp</dimen>
+    <dimen name="caseRightMargin">20dp</dimen>
+    <dimen name="caseLeftMargin">20dp</dimen>
+
+
+</resources>
