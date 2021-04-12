@@ -1,6 +1,7 @@
 if (isRelease) { // 如果是发布版本时，各个模块都不能独立运行
     apply plugin: 'com.android.library'
-    apply plugin: 'com.github.dcendents.android-maven'
+    // JitPack Maven
+//    apply plugin: 'com.github.dcendents.android-maven'
 } else {
     apply plugin: 'com.android.application'
 }
