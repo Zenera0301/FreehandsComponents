@@ -21,7 +21,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.dj.case_record_choose.R;
 import com.dj.case_record_choose.adapter.CaseRecordChooseAdapter;
 import com.dj.case_record_choose.entity.CaseInfo;
@@ -40,6 +42,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 
 @Route(path = "/case/Case_MainActivity")
 public class Case_MainActivity extends AppCompatActivity implements CaseRecordChooseAdapter.CheckInterface, CaseRecordChooseAdapter.ExpandInterface {
+    private static final String TAG = "Case_MainActivity";
     ExpandableListView listView;
     CheckBox allCheckBox;
     TextView gotoAnaly;
@@ -49,19 +52,30 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
     TextView shoppingcatNum;
     Button actionBarEdit;
     LinearLayout empty_shopcart;
-    ArrayList<CaseRecordChooseBean> beanLists = new ArrayList<>();
+    List<CaseRecordChooseBean> beanLists = new ArrayList<>();
 
     private Context mcontext;
     private int mtotalCount = 0;
     private CaseRecordChooseAdapter adapter;
-    private List<CaseInfo> caseList; // 案件的列表
-    private Map<Integer, List<RecordInfo>> recordList; // 记录的列表 Integer是案件ID， List<RecordInfo>是该案件下的所有记录的列表
+
+    @Autowired
+    List<CaseInfo> caseList; // 案件的列表
+
+    @Autowired
+    Map<Integer, List<RecordInfo>> recordListMap; // 记录的列表 Integer是案件ID， List<RecordInfo>是该案件下的所有记录的列表
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_case);
+
+        // 参数注入
+        ARouter.getInstance().inject(this);
+//        Log.i(TAG, "onCreate: caseList="+caseList);
+//        Log.i(TAG, "onCreate: recordList="+ recordListMap);
+
         initView();
         initActionBar();
         initData();
@@ -96,40 +110,17 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
         actionBarEdit = (Button) view.findViewById(R.id.actionBar_edit);
         empty_shopcart = (LinearLayout) findViewById(R.id.layout_empty_shopcart);
     }
+
     /**
-     * 模拟数据
-     * 遵循适配器的数据列表填充原则，组元素被放在一个list中，对应着组元素的下辖子元素被放在Map中
-     * 其Key是组元素的Id
+     * 初始化数据
      */
     private void initData() {
         mcontext = this;
-        caseList = new ArrayList<CaseInfo>();
-        recordList = new HashMap<Integer, List<RecordInfo>>();
-
-        // 拿到caseList和recordList
-        caseList.add(new CaseInfo(0 + "", "案件1"));
-        List<RecordInfo> records1 = new ArrayList<>();
-        records1.add(new RecordInfo(0 + "-" + 0, caseList.get(0).getName() + "的第" + (0 + 1) + "个子项", caseList.get(0).getName() + "的第" + (0 + 1) + "个子项"));
-        records1.get(0).setCases(caseList.get(0).getName()); // 将案件名与记录匹配起来
-        records1.get(0).setType(getString(R.string.exclude));
-        recordList.put(caseList.get(0).getId(), records1);
-        for (int i = 1; i < 10; i++) {
-            caseList.add(new CaseInfo(i + "", "案件" + (i + 1)));
-            List<RecordInfo> records = new ArrayList<>();
-            for (int j = 0; j <= i; j++) {
-                //i-j 就是商品的id， 对应着第几个店铺的第几个商品，1-1 就是第一个店铺的第一个商品
-                records.add(new RecordInfo(i + "-" + j, caseList.get(i).getName() + "的第" + (j + 1) + "个子项", caseList.get(i).getName() + "的第" + (j + 1) + "个子项"));
-                records.get(j).setCases(caseList.get(i).getName()); // 将案件名与记录匹配起来
-            }
-            recordList.put(caseList.get(i).getId(), records);
-        }
-//        Log.i(TAG, "initData: caseList="+caseList.toString());
-//        Log.i(TAG, "initData: recordList="+recordList.toString());
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initEvents() {
         actionBarEdit.setVisibility(View.GONE);//隐藏最头上的编辑按钮
-        adapter = new CaseRecordChooseAdapter(caseList, recordList, mcontext);
+        adapter = new CaseRecordChooseAdapter(caseList, recordListMap, mcontext);
         adapter.setCheckInterface(this); // 设置案件复选框的接口
         adapter.setExpandInterface(this); // 设置案件layout点击展开或收起的接口
         // 设置item被点击后的事件
@@ -187,9 +178,9 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
      * @param targetType  目标类别
      */
     private void ModifyItemType(int casePosition, int position, String targetType) {
-        recordList.get(casePosition).get(position).setType(targetType);
+        recordListMap.get(casePosition).get(position).setType(targetType);
 
-        adapter.notifyDataSetChanged(recordList);
+        adapter.notifyDataSetChanged(recordListMap);
     }
 
     /**
@@ -202,7 +193,7 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
     @Override
     public void checkGroup(int groupPosition, boolean isChecked) {
         CaseInfo group = caseList.get(groupPosition);
-        List<RecordInfo> child = recordList.get(group.getId());
+        List<RecordInfo> child = recordListMap.get(group.getId());
         for (int i = 0; i < child.size(); i++) {
             child.get(i).setChoosed(isChecked);
             if(isChecked) {
@@ -231,7 +222,7 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
     public void checkChild(int groupPosition, int childPosition, boolean isChecked) {
         boolean allChildSameState = true; // 判断该组下面的所有子元素是否处于同一状态
         CaseInfo group = caseList.get(groupPosition);
-        List<RecordInfo> child = recordList.get(group.getId());
+        List<RecordInfo> child = recordListMap.get(group.getId());
         for (int i = 0; i < child.size(); i++) {
             //不选全中
             if (child.get(i).isChoosed() != isChecked) {
@@ -280,7 +271,7 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
         mtotalCount = 0;
         for (int i = 0; i < caseList.size(); i++) {
             CaseInfo group = caseList.get(i);
-            List<RecordInfo> child = recordList.get(group.getId());
+            List<RecordInfo> child = recordListMap.get(group.getId());
             for (int j = 0; j < child.size(); j++) {
                 RecordInfo record = child.get(j);
                 if (record.isChoosed()) {
@@ -320,7 +311,7 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
         for (int i = 0; i < caseList.size(); i++) {
             CaseInfo group = caseList.get(i);
             group.setChoosed(allCheckBox.isChecked());
-            List<RecordInfo> child = recordList.get(group.getId());
+            List<RecordInfo> child = recordListMap.get(group.getId());
             for (int j = 0; j < child.size(); j++) {
                 child.get(j).setChoosed(allCheckBox.isChecked());//这里出现过错误
             }
@@ -341,7 +332,6 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
         return true;
     }
 
-    private static final String TAG = "Case_MainActivity";
     /**
      * 跳转到新的界面，分析案件
      */
@@ -360,7 +350,7 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
                 beanLists.clear();
                 for (int i = 0; i < caseList.size(); i++) {
                     CaseInfo group = caseList.get(i);
-                    List<RecordInfo> child = recordList.get(group.getId());
+                    List<RecordInfo> child = recordListMap.get(group.getId());
                     for (int j = 0; j < child.size(); j++) {
                         RecordInfo record = child.get(j);
                         if (record.isChoosed()) {
@@ -369,6 +359,10 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
                     }
                 }
                 Log.i(TAG, "onClick:beanLists="+beanLists.toString());
+
+                ARouter.getInstance().build("/app/SecondActivity")
+                        .withObject("beanLists", beanLists)
+                        .navigation();
                 return;
             }
         });
@@ -385,7 +379,7 @@ public class Case_MainActivity extends AppCompatActivity implements CaseRecordCh
     protected void onDestroy() {
         super.onDestroy();
         adapter = null;
-        recordList.clear();
+        recordListMap.clear();
         caseList.clear();
         mtotalCount = 0;
     }

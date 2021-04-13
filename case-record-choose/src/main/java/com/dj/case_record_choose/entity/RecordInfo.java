@@ -1,11 +1,21 @@
 package com.dj.case_record_choose.entity;
 
-/**
- * Created by Administrator on 2017/3/26.
- * 商品信息
- */
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
+
 
 public class RecordInfo {
+    public String cases; // 所属案件名
+    public String type; // 包含 include ，排除 exclude
+    public String id;
+    public String name;
+    public String desc;
+    public int postion;
+    public boolean isChoosed;
+
     @Override
     public String toString() {
         return "\nRecordInfo{" +
@@ -13,48 +23,14 @@ public class RecordInfo {
                 ", type='" + type + '\'' +
                 ", id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", isChoosed=" + isChoosed +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", desc='" + desc + '\'' +
-                ", price=" + price +
-                ", prime_price=" + prime_price +
                 ", postion=" + postion +
-                ", count=" + count +
-                ", color='" + color + '\'' +
-                ", size='" + size + '\'' +
-                ", goodsImg=" + goodsImg +
+                ", isChoosed=" + isChoosed +
                 '}';
     }
 
-    private String cases; // 所属案件名
-    private String type; // 包含 include ，排除 exclude
-    private String id;
-    private String name;
-    private boolean isChoosed;
-    private String imageUrl;
-    private String desc;
-    private double price;
-    private double prime_price;
-    private int postion;
-    private int count;
-    private String color;
-    private String size;
-    private int goodsImg;
-
-    public RecordInfo(String id, String name, String desc, double price, double prime_price,
-                      String color, String size, int goodsImg, int count) {
-        this.id = id;
-        this.name = name;
-        this.desc = desc;
-        this.price = price;
-        this.prime_price = prime_price;
-        this.count = count;
-        this.color = color;
-        this.size = size;
-        this.goodsImg = goodsImg;
+    public RecordInfo() {
     }
-
-
 
     public RecordInfo(String id, String name, String desc) {
         this.id = id;
@@ -62,8 +38,6 @@ public class RecordInfo {
         this.desc = desc;
         this.type = "include";
     }
-
-
 
 
     public String getId() {
@@ -90,13 +64,6 @@ public class RecordInfo {
         isChoosed = choosed;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public String getDesc() {
         return desc;
@@ -106,21 +73,7 @@ public class RecordInfo {
         this.desc = desc;
     }
 
-    public double getPrice() {
-        return price;
-    }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getPrime_price() {
-        return prime_price;
-    }
-
-    public void setPrime_price(double prime_price) {
-        this.prime_price = prime_price;
-    }
 
     public int getPostion() {
         return postion;
@@ -128,38 +81,6 @@ public class RecordInfo {
 
     public void setPostion(int postion) {
         this.postion = postion;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public int getGoodsImg() {
-        return goodsImg;
-    }
-
-    public void setGoodsImg(int goodsImg) {
-        this.goodsImg = goodsImg;
     }
 
     public String getCases() {
@@ -180,9 +101,51 @@ public class RecordInfo {
     }
 
     public String getCaseId(){
-        if(id.length() != 3){
+        if(id.length() != 3) {
             return null;
         }
         return id.split("-")[0];
     }
+
+//    // parcelable
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @RequiresApi(api = Build.VERSION_CODES.Q)
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(cases);
+//        dest.writeString(type);
+//        dest.writeString(id);
+//        dest.writeString(name);
+//        dest.writeString(desc);
+//        dest.writeInt(postion);
+//        dest.writeBoolean(isChoosed);
+//    }
+//
+//
+//    protected RecordInfo(Parcel in) {
+//        cases = in.readString();
+//        type = in.readString();
+//        id = in.readString();
+//        name = in.readString();
+//        desc = in.readString();
+//        postion = in.readInt();
+//        isChoosed = in.readByte() != 0;
+//    }
+//
+//    public static final Creator<RecordInfo> CREATOR = new Creator<RecordInfo>() {
+//        @Override
+//        public RecordInfo createFromParcel(Parcel in) {
+//            return new RecordInfo(in);
+//        }
+//
+//        @Override
+//        public RecordInfo[] newArray(int size) {
+//            return new RecordInfo[size];
+//        }
+//    };
+
 }

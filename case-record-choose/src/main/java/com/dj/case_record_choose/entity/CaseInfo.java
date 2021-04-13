@@ -1,17 +1,18 @@
 package com.dj.case_record_choose.entity;
 
-/**
- * Created by Administrator on 2017/3/26.
- * 店铺信息
- */
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
 
 public class CaseInfo {
-    private String id;
-    private String name;
-    private boolean isChoosed;
-    private boolean isEditor; //自己对该组的编辑状态
-    private boolean ActionBarEditor;// 全局对该组的编辑状态
-    private int flag;
+    public String id;
+    public String name;
+    public boolean isChoosed;
+
+    public CaseInfo() {
+    }
 
     public CaseInfo(String id, String name) {
         this.id = id;
@@ -42,20 +43,6 @@ public class CaseInfo {
         isChoosed = choosed;
     }
 
-    public boolean isEditor() {
-        return isEditor;
-    }
-
-    public void setEditor(boolean editor) {
-        isEditor = editor;
-    }
-    public boolean isActionBarEditor() {
-        return ActionBarEditor;
-    }
-
-    public void setActionBarEditor(boolean actionBarEditor) {
-        ActionBarEditor = actionBarEditor;
-    }
 
     @Override
     public String toString() {
@@ -63,9 +50,6 @@ public class CaseInfo {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", isChoosed=" + isChoosed +
-                ", isEditor=" + isEditor +
-                ", ActionBarEditor=" + ActionBarEditor +
-                ", flag=" + flag +
                 '}';
     }
 }

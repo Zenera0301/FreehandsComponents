@@ -212,26 +212,26 @@ public class CaseRecordChooseAdapter extends BaseExpandableListAdapter /**implem
             }
         });
 
-        /**【文字指的是组的按钮的文字】
-         * 当我们按下ActionBar的 "编辑"按钮， 应该把所有组的文字显示"编辑",并且设置按钮为不可见
-         * 当我们完成编辑后，再把组的编辑按钮设置为可见
-         */
-        if (group.isActionBarEditor()) {
-            group.setEditor(false);
-            groupViewHolder.storeEdit.setVisibility(View.GONE);
-        } else {
+//        /**【文字指的是组的按钮的文字】
+//         * 当我们按下ActionBar的 "编辑"按钮， 应该把所有组的文字显示"编辑",并且设置按钮为不可见
+//         * 当我们完成编辑后，再把组的编辑按钮设置为可见
+//         */
+//        if (group.isActionBarEditor()) {
+//            group.setEditor(false);
+//            groupViewHolder.storeEdit.setVisibility(View.GONE);
+//        } else {
             groupViewHolder.storeEdit.setVisibility(View.GONE);//无论如何这里要隐藏“编辑”按钮
-        }
+//        }
 
         /**
          * 思路:当我们按下组的"编辑"按钮后，组处于编辑状态，文字显示"完成"
          * 当我们点击“完成”按钮后，文字显示"编辑“,组处于未编辑状态
          */
-        if (group.isEditor()) {
-            groupViewHolder.storeEdit.setText("完成");
-        } else {
-            groupViewHolder.storeEdit.setText("编辑");
-        }
+//        if (group.isEditor()) {
+//            groupViewHolder.storeEdit.setText("完成");
+//        } else {
+//            groupViewHolder.storeEdit.setText("编辑");
+//        }
 
         groupViewHolder.storeEdit.setOnClickListener(new GroupViewClick(group, groupPosition, groupViewHolder.storeEdit));
         return convertView;
@@ -379,11 +379,11 @@ public class CaseRecordChooseAdapter extends BaseExpandableListAdapter /**implem
         @Override
         public void onClick(View v) {
             if (editor.getId() == v.getId()) {
-                if (group.isEditor()) {
-                    group.setEditor(false);
-                } else {
-                    group.setEditor(true);
-                }
+//                if (group.isEditor()) {
+//                    group.setEditor(false);
+//                } else {
+//                    group.setEditor(true);
+//                }
                 notifyDataSetChanged();
             }
         }

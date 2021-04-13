@@ -7,9 +7,9 @@ package com.dj.case_record_choose.entity;
  * 如：读取记录1和记录2用于并，读取记录3用于差
  */
 public class CaseRecordChooseBean {
-    String caseName;
-    String recordName;
-    String type; // 包含 include ，排除 exclude
+    public String caseName;
+    public String recordName;
+    public String type; // 包含 include ，排除 exclude
 
     @Override
     public String toString() {
@@ -18,6 +18,9 @@ public class CaseRecordChooseBean {
                 ", recordName='" + recordName + '\'' +
                 ", type='" + type + '\'' +
                 "}";
+    }
+
+    public CaseRecordChooseBean() {
     }
 
     public CaseRecordChooseBean(String caseName, String recordName, String type) {

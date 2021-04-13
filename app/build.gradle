@@ -58,6 +58,7 @@ dependencies {
     // 添加ARouter依赖  通过查看https://github.com/alibaba/ARouter的Lastest version设置最新版
     implementation 'com.alibaba:arouter-api:1.5.1'
     annotationProcessor 'com.alibaba:arouter-compiler:1.5.1'
+    implementation 'com.alibaba:fastjson:1.2.48'
 
 
     // 如果是集成化模式，做发布版本时。各个模块都不能独立运行了
